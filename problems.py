@@ -5,9 +5,17 @@ import util
 def problem1():
     """"Add all the natural numbers below one thousand that are
     multiples of 3 or 5."""
-    return sum(n for n in xrange(1000) if not n % 3 or not n % 5)
+    def msum(r, ceil):
+        ceil -= 1
+        last = ceil - ceil%r
+        n = last / r
+        return (r + last) * n / 2
+    return msum(3, 1000) + msum(5, 1000) - msum(15, 1000)
 
 def problem2():
+    """By considering the terms in the Fibonacci sequence whose
+    values do not exceed four million, find the sum of the
+    even-valued terms."""
     from itertools import takewhile
     def fib():
         a = 0;
@@ -21,6 +29,7 @@ def problem2():
     return sum(n for n in takewhile(lambda x: x < ceil, fib()) if not n % 2)
 
 def problem3():
+    """Find the largest prime factor of a composite number."""
     def factorize(natural):
         n = natural
         check = 2
@@ -40,6 +49,8 @@ def problem3():
     return tuple(sorted(factors))[-1]
 
 def problem4():
+    """Find the largest palindrome made from the product
+    of two 3-digit numbers."""
     def ispalindromic(n):
         s = str(n)
         return s == s[::-1]
@@ -54,26 +65,18 @@ def problem4():
     return a * b
 
 def problem5():
-    def lcm(a, b):
-        return abs(a * b) / gcd(a, b)
-
-    def gcd(a, b):
-        if not b:
-            return a
-        return gcd(b, a % b)
-
-    rng = xrange(1, 21)
-    i = 1
-    for n in rng:
-        i = lcm(i, n)
-    return i
+    """What is the smallest number divisible by each of
+    the numbers 1 to 20?"""
+    return reduce(util.lcm, xrange(1, 21), 10)
 
 def problem6():
+    """What is the difference between the sum of the squares and
+    the square of the sums?"""
+    from itertools import imap
     ceil = 100
     square = lambda x: x ** 2
-    rng = range(1, 1+ceil)
-    sumosq = sum(map(square, rng))
-    sqosum = sum(rng) ** 2
+    sumosq = sum(imap(square, xrange(1, 1+ceil)))
+    sqosum = sum(xrange(1, 1+ceil)) ** 2
     return sqosum - sumosq
 
 def problem7():
@@ -128,44 +131,9 @@ def problem9():
 
 def problem10():
     """Find the sum of all the primes below two million."""
-    TOP = 2000000
-
-    def primegen():
-        """
-        A prime generator. One can assert its ok based on the solution of
-        problem 07.::
-
-            >>> g = iter(primegen())
-            >>> assert [g.next() for i in range(10002)][-1] == 104743
-        """
-
-        primes = [2, 3, 5, 7, 11]
-
-        for p in primes:
-            yield p
-
-        n = primes[-1] + 2
-        while True:
-            sqrt = math.sqrt(n)
-
-            for p in primes:
-                if not n % p:
-                    break
-                elif p > sqrt:
-                    yield n
-                    primes.append(n)
-                    break
-
-            # all primes are odd, and as we started with 5...
-            n += 2
-
-    g = iter(primegen())
-    s = 0
-    cur = 0
-    while cur <= TOP:
-        s += cur
-        cur = g.next()
-    return s
+    from itertools import takewhile
+    ceil = 2000000
+    return sum(n for n in takewhile(lambda x: x < ceil, util.primegen()))
 
 def problem11():
     """What is the greatest product of four adjacent numbers in any
