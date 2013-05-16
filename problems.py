@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 import data
 import util
@@ -177,3 +178,28 @@ def problem36():
         return s == s[::-1]
     return sum(n for n in xrange(int(10e5) + 1)
                if palindromic(str(n)) and palindromic(util.itoa(n, 2)))
+
+
+def problem19():
+    """How many Sundays fell on the first of the month during the
+    twentieth century (1 Jan 1901 to 31 Dec 2000)?"""
+    def isleap(year):
+        return year % 4 == 0 and (not year % 100 == 0 or year % 400 == 0)
+
+    def mdays(year, month):
+        if month == 2:
+            return 28 if not isleap(year) else 29
+        elif month in (4, 6, 9, 11):
+            return 30
+        else:
+            return 31
+
+    sundays = 1
+    acc_days = 0
+    for year in range(1901, 2001):
+        for month in range(1, 13):
+            acc_days += mdays(year, month)
+            if acc_days % 7 == 0:
+                sundays += 1
+
+    return sundays
