@@ -16,7 +16,6 @@ def parse_solutions(lines, fmt="^(?P<num>\d+)\.\s+(?P<solution>\S+)$"):
 def run():
     import problems
 
-    # parse cli options
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--solutions', metavar='SOLUTIONS_FILE', default='solutions.txt')
     parser.add_argument('-v', '--show_solutions', default=False, action='store_true')
@@ -27,8 +26,9 @@ def run():
     ignored = map(int, (p[1:] for p in args.problems if p.startswith('-')))
     selected = map(int, (p for p in args.problems if not p.startswith('-')))
 
+    # map problem numbers to their solution functions
     problems = dict((int(re.match('problem(\d+)$', s).group(1)), fun)
-            for (s, fun) in inspect.getmembers(problems) if s.startswith('problem'))
+                    for (s, fun) in inspect.getmembers(problems) if s.startswith('problem'))
 
     # you can grab the solution file from "http://projecteuler-solutions.googlecode.com/svn/trunk/Solutions.txt"
     with open(args.solutions) as fp:
@@ -63,7 +63,7 @@ def run():
 
     print
     print '='*75
-    print 'ran', ran, 'problems (%d fail) in %0.3f secods' % (ran - ok, time.time() - tstart)
+    print 'ran', ran, 'problems (%d fail) in %0.3f seconds' % (ran - ok, time.time() - tstart)
 
 
 if __name__ == '__main__':
