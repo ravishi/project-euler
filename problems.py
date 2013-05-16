@@ -171,15 +171,6 @@ def problem16():
     return sum(map(int, str(2 ** 1000)))
 
 
-def problem36():
-    """Find the sum of all numbers less than one million, which are
-    palindromic in base 10 and base 2."""
-    def palindromic(s):
-        return s == s[::-1]
-    return sum(n for n in xrange(int(10e5) + 1)
-               if palindromic(str(n)) and palindromic(util.itoa(n, 2)))
-
-
 def problem19():
     """How many Sundays fell on the first of the month during the
     twentieth century (1 Jan 1901 to 31 Dec 2000)?"""
@@ -203,3 +194,12 @@ def problem19():
                 sundays += 1
 
     return sundays
+
+
+def problem36():
+    """Find the sum of all numbers less than one million, which are
+    palindromic in base 10 and base 2."""
+    def palindromic(s):
+        return s == s[::-1]
+    return sum(n for n in xrange(int(10e5) + 1)
+               if palindromic(str(n)) and palindromic(util.itoa(n, 2)))
