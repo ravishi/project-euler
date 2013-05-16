@@ -2,6 +2,7 @@ import math
 import data
 import util
 
+
 def problem1():
     """"Add all the natural numbers below one thousand that are
     multiples of 3 or 5."""
@@ -11,6 +12,7 @@ def problem1():
         n = last / r
         return (r + last) * n / 2
     return msum(3, 1000) + msum(5, 1000) - msum(15, 1000)
+
 
 def problem2():
     """By considering the terms in the Fibonacci sequence whose
@@ -27,6 +29,7 @@ def problem2():
             yield a
     ceil = 4 * 10 ** 6
     return sum(n for n in takewhile(lambda x: x < ceil, fib()) if not n % 2)
+
 
 def problem3():
     """Find the largest prime factor of a composite number."""
@@ -48,9 +51,10 @@ def problem3():
     factors = factorize(n)
     return tuple(sorted(factors))[-1]
 
+
 def problem4():
-    """Find the largest palindrome made from the product
-    of two 3-digit numbers."""
+    """Find the largest palindrome made from the product of two 3-digit
+    numbers."""
     def ispalindromic(n):
         s = str(n)
         return s == s[::-1]
@@ -64,10 +68,12 @@ def problem4():
     a, b = found
     return a * b
 
+
 def problem5():
     """What is the smallest number divisible by each of
     the numbers 1 to 20?"""
     return reduce(util.lcm, xrange(1, 21), 10)
+
 
 def problem6():
     """What is the difference between the sum of the squares and
@@ -78,6 +84,7 @@ def problem6():
     sumosq = sum(imap(square, xrange(1, 1+ceil)))
     sqosum = sum(xrange(1, 1+ceil)) ** 2
     return sqosum - sumosq
+
 
 def problem7():
     """Find the 10001st prime."""
@@ -96,6 +103,7 @@ def problem7():
         # all primes are odd
         n += 2
     return primes[-1]
+
 
 def problem8():
     """Find the greatest product of five consecutive digits in the
@@ -118,6 +126,7 @@ def problem8():
 
     return result
 
+
 def problem9():
     """Find the only Pythagorean triplet, {a, b, c}, for
     which a + b + c = 1000."""
@@ -129,11 +138,13 @@ def problem9():
             if a * a + b * b == c * c:
                 return a * b * c
 
+
 def problem10():
     """Find the sum of all the primes below two million."""
     from itertools import takewhile
     ceil = 2000000
     return sum(n for n in takewhile(lambda x: x < ceil, util.primegen()))
+
 
 def problem11():
     """What is the greatest product of four adjacent numbers in any
@@ -146,15 +157,18 @@ def problem11():
     diffs = ((0, 1), (1, 0), (1, 1), (1, -1))
     return max(product(grid_get(grid, x + i * dx, y + i * dy) for i in range(4)) for y in range(len(grid)) for x in range(len(grid[0])) for (dx, dy) in diffs)
 
+
 def problem13():
     """Work out the first ten digits of the sum of the following
     one-hundred 50-digit numbers."""
     numbers = map(int, data.problem13.strip().splitlines())
     return int(str(sum(numbers))[:10])
 
+
 def problem16():
     """What is the sum of the digits of the number 21000?"""
     return sum(map(int, str(2 ** 1000)))
+
 
 def problem36():
     """Find the sum of all numbers less than one million, which are

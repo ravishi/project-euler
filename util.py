@@ -38,6 +38,7 @@ def itoa(n, base=10, numerals=string.digits+string.ascii_lowercase):
     """
     return not n and '0' or itoa(n // base, base, numerals).lstrip('0') + numerals[n % base]
 
+
 def primegen():
     """
     A simple prime generator. We can assert its ok based on the
