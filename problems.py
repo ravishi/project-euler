@@ -159,6 +159,68 @@ def problem11():
     return max(product(grid_get(grid, x + i * dx, y + i * dy) for i in range(4)) for y in range(len(grid)) for x in range(len(grid[0])) for (dx, dy) in diffs)
 
 
+def problem12():
+    """What is the value of the first triangle number to have over five
+    hundred divisors?"""
+
+    # first thing, trinangle numbers can be calculated by the formula:
+    #
+    #   t(n) = n * (n + 1) / 2
+    #
+    # where t(n) is the value of the nth triangle number
+    #
+    # after that, we use the Sum of Divisors function [1] to compute
+    # the number of divisors of a number
+
+    from util import primegen
+    from collections import Counter
+    from operator import mul
+
+    def trianglenum(nth):
+        return nth * (nth + 1) / 2
+
+    # we'll reuse our simple `primegen` function to generate primes. but
+    # we want to save the generated primes, since we'll be using them
+    # for more than one iteration.
+    _primes = []
+    _primes_generator = primegen()
+
+    def primes():
+        for p in _primes:
+            yield p
+        for p in _primes_generator:
+            _primes.append(p)
+            yield p
+
+    # now we go through the triangle numbers, counting their divisors
+    i = 1
+    while True:
+        n = trianglenum(i)
+        i += 1
+
+        factors = []
+
+        # break n into prime factors
+        r = n
+        g = primes()
+
+        while r > 1:
+            p = next(g)
+            while r > 1 and r % p == 0:
+                factors.append(p)
+                r /= p
+
+        # count the prime factors of n
+        counter = Counter(factors)
+
+        # multiply the count of prime factors accordingly to the sum of
+        # divisors formula
+        d = reduce(mul, (n + 1 for n in counter.values()), 1)
+
+        if d > 500:
+            return n
+
+
 def problem13():
     """Work out the first ten digits of the sum of the following
     one-hundred 50-digit numbers."""
