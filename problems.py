@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import math
 import data
 import util
@@ -60,8 +59,8 @@ def problem4():
         s = str(n)
         return s == s[::-1]
     found = 0, 0
-    for a in xrange(999, 0, -1):
-        for b in xrange(999, 0, -1):
+    for a in range(999, 0, -1):
+        for b in range(999, 0, -1):
             if ispalindromic(a * b):
                 c, d = found
                 if a * b > c * d:
@@ -73,17 +72,17 @@ def problem4():
 def problem5():
     """What is the smallest number divisible by each of
     the numbers 1 to 20?"""
-    return reduce(util.lcm, xrange(1, 21), 10)
+    from functools import reduce
+    return reduce(util.lcm, range(1, 21), 10)
 
 
 def problem6():
     """What is the difference between the sum of the squares and
     the square of the sums?"""
-    from itertools import imap
     ceil = 100
     square = lambda x: x ** 2
-    sumosq = sum(imap(square, xrange(1, 1+ceil)))
-    sqosum = sum(xrange(1, 1+ceil)) ** 2
+    sumosq = sum(map(square, range(1, 1+ceil)))
+    sqosum = sum(range(1, 1+ceil)) ** 2
     return sqosum - sumosq
 
 
@@ -110,6 +109,7 @@ def problem8():
     """Find the greatest product of five consecutive digits in the
     1000-digit number."""
     import operator
+    from functools import reduce
 
     digits = map(int, data.problem8)
 
@@ -152,7 +152,8 @@ def problem11():
     direction (up, down, left, right, or diagonally) in the 2020 grid?"""
     # ok, I copied this one. shame on me. but this solution is so pretty!
     import operator
-    grid = [map(int, line.split()) for line in data.problem11.strip().splitlines()]
+    from functools import reduce
+    grid = [list(map(int, line.split())) for line in data.problem11.strip().splitlines()]
     product = lambda x: reduce(operator.mul, x)
     grid_get = lambda grid, x, y: grid[y][x] if 0 <= y < len(grid) and 0 <= x < len(grid[0]) else 0
     diffs = ((0, 1), (1, 0), (1, 1), (1, -1))
@@ -175,6 +176,7 @@ def problem12():
     from util import primegen
     from collections import Counter
     from operator import mul
+    from functools import reduce
 
     def trianglenum(nth):
         return nth * (nth + 1) / 2
@@ -263,5 +265,5 @@ def problem36():
     palindromic in base 10 and base 2."""
     def palindromic(s):
         return s == s[::-1]
-    return sum(n for n in xrange(int(10e5) + 1)
+    return sum(n for n in range(int(10e5) + 1)
                if palindromic(str(n)) and palindromic(util.itoa(n, 2)))

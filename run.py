@@ -5,7 +5,7 @@ import sys
 import argparse
 
 
-def parse_solutions(lines, fmt="^(?P<num>\d+)\.\s+(?P<solution>\S+)$"):
+def parse_solutions(lines, fmt=r"^(?P<num>\d+)\.\s+(?P<solution>\S+)$"):
     refmt = re.compile(fmt)
     for line in lines:
         match = refmt.match(line.rstrip())
@@ -15,7 +15,6 @@ def parse_solutions(lines, fmt="^(?P<num>\d+)\.\s+(?P<solution>\S+)$"):
 
 def run():
     import problems
-
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--solutions', metavar='SOLUTIONS_FILE', default='solutions.txt')
     parser.add_argument('-v', '--show_solutions', default=False, action='store_true')
@@ -23,11 +22,11 @@ def run():
 
     args = parser.parse_args()
 
-    ignored = map(int, (p[1:] for p in args.problems if p.startswith('-')))
-    selected = map(int, (p for p in args.problems if not p.startswith('-')))
+    ignored = list(map(int, (p[1:] for p in args.problems if p.startswith('-'))))
+    selected = list(map(int, (p for p in args.problems if not p.startswith('-'))))
 
     # map problem numbers to their solution functions
-    problems = dict((int(re.match('problem(\d+)$', s).group(1)), fun)
+    problems = dict((int(re.match(r'^problem(\d+)$', s).group(1)), fun)
                     for (s, fun) in inspect.getmembers(problems) if s.startswith('problem'))
 
     # you can grab the solution file from "http://projecteuler-solutions.googlecode.com/svn/trunk/Solutions.txt"
@@ -37,33 +36,36 @@ def run():
     tstart = time.time()
 
     ok, ran = 0, 0
-    for num, problem in sorted(problems.iteritems(), key=lambda x: x[0]):
+    for num, problem in sorted(problems.items(), key=lambda x: x[0]):
         if selected and not num in selected or ignored and num in ignored:
             continue
-        print 'problem', num, '...',
-        sys.stdout.flush()
+        print('problem', num, '...', end='', flush=True)
         start = time.time()
         solution = solutions.get(num)
         if solution is not None:
+            ran += 1
             try:
                 result = problem()
-            except Exception, e:
-                print 'ERROR: %s' % e
+            except Exception as e:
+                print('ERROR:', e)
             else:
                 took = time.time() - start
-                ran += 1
-                _pass = result == solution
-                if _pass:
+                pass_ = result == solution
+                if pass_:
                     ok += 1
 
-                print '%s (%0.3fs)' % ('OK' if _pass else 'FAIL', took,),
-                print '[%s]' % (result,) if args.show_solutions or not _pass else ''
+                print('{0} ({1:0.3f}s)'.format('OK' if pass_ else 'FAIL', took))
+                if args.show_solutions or not pass_:
+                    print('[{0}]'.format(result))
         else:
-            print "we don't know the solution"
+            print("we don't know the solution")
 
-    print
-    print '='*75
-    print 'ran', ran, 'problems (%d fail) in %0.3f seconds' % (ran - ok, time.time() - tstart)
+    print()
+    print('=' * 75)
+
+    fail_count = ran - ok
+    time_taken = time.time() - tstart
+    print('ran', ran, 'problems ({0} failed) in {1:0.3f} seconds'.format(fail_count, time_taken))
 
 
 if __name__ == '__main__':
