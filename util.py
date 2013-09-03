@@ -8,9 +8,7 @@ def gcd(a, b):
         >>> gcd(48, 180)
         12
     """
-    if not b:
-        return a
-    return gcd(b, a % b)
+    return gcd(b, a % b) if not b else a
 
 
 def lcm(a, b):
@@ -60,6 +58,7 @@ def primegen():
         yield p
 
     n = primes[-1] + 2
+
     while True:
         sqrt = math.sqrt(n)
 
@@ -67,8 +66,8 @@ def primegen():
             if not n % p:
                 break
             elif p > sqrt:
-                yield n
                 primes.append(n)
+                yield n
                 break
 
         # all primes are odd, and as we started with 5...
