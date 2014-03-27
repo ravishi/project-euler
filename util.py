@@ -70,5 +70,5 @@ def primegen():
                 yield n
                 break
 
-        # all primes are odd, and as we started with 5...
+        # all primes greater than 2 are odd...
         n += 2
