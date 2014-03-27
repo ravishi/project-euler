@@ -18,6 +18,7 @@ def run():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--solutions', metavar='SOLUTIONS_FILE', default='solutions.txt')
     parser.add_argument('-v', '--show_solutions', default=False, action='store_true')
+    parser.add_argument('-t', '--show-traceback', default=False, action='store_true')
     parser.add_argument('problems', nargs='*')
 
     args = parser.parse_args()
@@ -47,6 +48,8 @@ def run():
             try:
                 result = problem()
             except Exception as e:
+                if args.show_traceback:
+                    raise
                 print('ERROR:', e)
             else:
                 took = time.time() - start

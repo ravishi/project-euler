@@ -20,12 +20,9 @@ def problem2():
     even-valued terms."""
     from itertools import takewhile
     def fib():
-        a = 0;
-        b = 1
+        a, b = 0, 1
         while 1:
-            c = a + b
-            a = b
-            b = c
+            a, b = b, a + b
             yield a
     ceil = 4 * 10 ** 6
     return sum(n for n in takewhile(lambda x: x < ceil, fib()) if not n % 2)
@@ -36,20 +33,17 @@ def problem3():
     def factorize(natural):
         n = natural
         check = 2
-        factors = []
         while check * check <= n:
             if n % check == 0:
-                factors.append(check)
+                yield check
                 n = n / check
             else:
                 check += 1
         if not n == 1:
-            factors.append(n)
-        return factors
+            yield n
 
     n = 600851475143
-    factors = factorize(n)
-    return tuple(sorted(factors))[-1]
+    return sorted(factorize(n))[-1]
 
 
 def problem4():
@@ -58,7 +52,9 @@ def problem4():
     def ispalindromic(n):
         s = str(n)
         return s == s[::-1]
+
     found = 0, 0
+
     for a in range(999, 0, -1):
         for b in range(999, 0, -1):
             if ispalindromic(a * b):
@@ -81,9 +77,9 @@ def problem6():
     the square of the sums?"""
     ceil = 100
     square = lambda x: x ** 2
-    sumosq = sum(map(square, range(1, 1+ceil)))
-    sqosum = sum(range(1, 1+ceil)) ** 2
-    return sqosum - sumosq
+    sum_of_squares = sum(map(square, range(1, ceil + 1)))
+    square_of_sum = sum(range(1, ceil + 1)) ** 2
+    return  square_of_sum - sum_of_squares
 
 
 def problem7():
@@ -113,10 +109,13 @@ def problem8():
 
     digits = map(int, data.problem8)
 
-    lastfive = []
     result = 0
+    lastfive = []
+
     for d in digits:
+
         lastfive.append(d)
+
         if len(lastfive) > 5:
             lastfive.pop(0)
 
@@ -131,9 +130,10 @@ def problem8():
 def problem9():
     """Find the only Pythagorean triplet, {a, b, c}, for
     which a + b + c = 1000."""
-    for a in range(1, 999):
-        for b in range(a + 1, 999 - a - 1):
-            c = 1000 - a - b
+    ceil = 1000
+    for a in range(1, ceil - 1):
+        for b in range(a + 1, ceil - a - 2):
+            c = ceil - a - b
             if c <= b:
                 break
             if a * a + b * b == c * c:

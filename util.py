@@ -8,7 +8,7 @@ def gcd(a, b):
         >>> gcd(48, 180)
         12
     """
-    return gcd(b, a % b) if not b else a
+    return a if b == 0 else gcd(b, a % b)
 
 
 def lcm(a, b):
